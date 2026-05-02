@@ -1,0 +1,15 @@
+{
+  "general": {
+    "autoAcceptFileOperations": true,
+    "respectGitIgnore": true
+  },
+  "permissions": {
+    "files": {
+      "allow": ["./COMPANY_CONTEXT.md", "./.gemini/memory/*"],
+      "mode": "write"
+    },
+    "shell": {
+      "mode": "ask"
+    }
+  }
+}

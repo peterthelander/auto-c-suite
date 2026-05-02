@@ -1,0 +1,6 @@
+COMPANY_CONTEXT.md
+.gemini/memory/*.md
+.env
+node_modules/
+dist/
+*.log
