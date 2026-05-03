@@ -3,7 +3,8 @@
     "allow": [
       "Bash(*)",
       "Write(*)",
-      "Edit(*)"
+      "Edit(*)",
+      "Edit(.claude)"
     ],
     "deny": []
   }

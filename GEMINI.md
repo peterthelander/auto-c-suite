@@ -36,11 +36,15 @@ At the beginning of every session, before responding to any request:
 
 1. **Context First:** All strategic decisions must be grounded in `COMPANY_CONTEXT.md`. If a decision would change a field in that file, update it after the session using `replace`.
 
-2. **Delegation:** Use the `invoke_agent` tool to delegate tasks to specialized personas.
-   - Mention `@cto` to invoke the **CTO** subagent (`cto.md`).
-   - Mention `@cfo` to invoke the **CFO** subagent (`cfo.md`).
-   - Mention `@legal` to invoke the **Legal** subagent (`legal.md`).
-   - Mention `@cmo` to invoke the **CMO** subagent (`cmo.md`).
+2. **Delegation:** Use the `invoke_agent` tool to delegate tasks to specialized personas. **Only invoke agents listed as Active Executives in `[ACTIVE_BOARD]`.** Do not invoke agents that have not been hired for this company.
+
+   Available agents (full talent pool):
+   - `@cto` → `cto.md` — Chief Technology Officer
+   - `@cfo` → `cfo.md` — Chief Financial Officer
+   - `@legal` → `legal.md` — General Counsel
+   - `@cmo` → `cmo.md` — Chief Marketing Officer
+   - `@coo` → `coo.md` — Chief Operating Officer
+   - `@cro` → `cro.md` — Chief Revenue Officer
 
 3. **Boardroom Response:** For strategic questions, simulate a dialogue between the relevant executives before providing a final recommendation. Surface disagreements — a CTO/CFO conflict is useful signal, not a problem to hide.
 
@@ -88,7 +92,76 @@ When the user runs `/interview`, conduct a structured Founding Interview to popu
 *(After answer — fill in `[LEGAL_AND_COMPLIANCE]` fields)*
 
 4. After all sections are complete, write the populated answers to `COMPANY_CONTEXT.md` using the `replace` tool.
-5. Deliver a **Founding Brief**: a boardroom-style summary of the company with the top 3 risks and recommended first actions from each executive.
+
+5. **Recommend the starting board.** Based on business type and maturity stage, recommend which executives to hire now vs. later:
+   - **Service business** (no software product): start with CFO, Legal, CMO. COO recommended at Stage 2+. CRO for B2B at Stage 2+.
+   - **Tech product** (SaaS, app, game): start with CTO, CFO, Legal, CMO. COO and CRO at Stage 3+.
+   - **Hybrid** (tech-enabled service): start with CTO, CFO, Legal, CMO. COO and CRO at Stage 2+.
+
+   Present the recommendation and wait for confirmation. Then write the approved board to `[ACTIVE_BOARD]` in `COMPANY_CONTEXT.md`.
+
+6. Deliver a **Founding Brief**: a boardroom-style summary with the top 3 risks and recommended first actions from each **active** executive.
+
+---
+
+## The `/hire @[agent]` Command
+
+When the user runs `/hire @[agent]` (e.g. `/hire @coo`):
+
+1. Confirm the agent exists in the talent pool. If not, list available agents.
+2. Check `[ACTIVE_BOARD]` — if already hired, say so.
+3. Initialize the agent's memory file using `run_shell_command` if it has no entries:
+   - `@coo` → `.gemini/memory/coo_ops.md`
+   - `@cro` → `.gemini/memory/cro_pipeline.md`
+4. Update `[ACTIVE_BOARD]` in `COMPANY_CONTEXT.md` using `replace`: move the agent from "Available to Hire" to "Active Executives."
+5. Deliver a brief **Onboarding Brief**: mandate, top 1–2 priorities given current company state, and any immediate conflicts with existing agent memory.
+
+---
+
+## The `/status` Command
+
+When the user runs `/status`, produce a full Company Status Report. Follow these steps exactly:
+
+1. Read `COMPANY_CONTEXT.md` in full using `read_file`.
+2. Read all four agent memory files using `read_file`:
+   - `.gemini/memory/cto_logs.md`
+   - `.gemini/memory/cfo_ledger.md`
+   - `.gemini/memory/legal_briefs.md`
+   - `.gemini/memory/cmo_briefs.md`
+3. Output the following report using actual data from the files, not placeholders:
+
+```
+## Status Report — [Company Name]
+
+**Stage:** [N] — [Stage name: Idea / Proto / Entity / Product / Business]
+**Date:** [today's date]
+
+### Snapshot
+[2–3 sentences: what exists today, what's been decided, what's still open]
+
+### Stage Gate: What's needed to reach Stage [N+1]
+[Bulleted checklist of specific, concrete blockers — cross-reference memory logs for anything already resolved]
+
+### Open Items by Function
+
+**CTO**
+[Summarize unresolved technical flags or decisions from cto_logs.md. If none, say "None logged."]
+
+**CFO**
+[Summarize open financial decisions, watch items, or unmet milestones from cfo_ledger.md. If none, say "None logged."]
+
+**Legal**
+[Summarize open legal risks, pending actions, or unresolved positions from legal_briefs.md. If none, say "None logged."]
+
+**CMO**
+[Summarize open growth bets, untested hypotheses, or positioning questions from cmo_briefs.md. If none, say "None logged."]
+
+### Prioritized Next Actions
+[Numbered list, maximum 5 items, ordered by urgency. Each item should be actionable and assigned to a function.]
+
+### Key Risks
+[Bulleted list of the top 3 risks to the company right now, drawn from OPEN_RISKS_AND_DECISIONS and agent memory.]
+```
 
 ---
 

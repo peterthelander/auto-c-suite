@@ -76,6 +76,27 @@
 
 ---
 
+## [ACTIVE_BOARD]
+> Set during the Founding Interview. Updated with `/hire @[agent]` as the company grows.
+
+- **Business Type:** *Service / Tech Product / Hybrid — determined during Founding Interview.*
+- **Active Executives:**
+  - *(Populated during Founding Interview)*
+- **Available to Hire:**
+  - *(Executives available but not yet active for this company)*
+
+**Full talent pool:**
+| Handle | Role | Best for |
+|--------|------|----------|
+| `@cto` | Chief Technology Officer | Any company building software |
+| `@cfo` | Chief Financial Officer | All companies |
+| `@legal` | General Counsel | All companies |
+| `@cmo` | Chief Marketing Officer | All companies |
+| `@coo` | Chief Operating Officer | Service businesses; any company at Stage 2+ |
+| `@cro` | Chief Revenue Officer | B2B companies focused on sales pipeline and closing |
+
+---
+
 ## [OPEN_RISKS_AND_DECISIONS]
 > Updated by the Chief of Staff after each board session.
 

@@ -10,17 +10,53 @@ Without that experience, a solo founder with a great idea and a working prototyp
 
 **auto-c-suite** is built to bridge that gap. It gives the developer, the chef, the consultant, and the creative a full executive team — CTO, CFO, General Counsel, CMO — that brings that accumulated institutional knowledge to bear on their specific situation. You don't need to spend years climbing a corporate ladder to get access to senior-level strategic thinking. That's what this is for.
 ## 🧠 How It Works: Multi-Agent Orchestration
-Unlike generic chatbots, **auto-c-suite** uses a role-based, multi-agent architecture:
-* **@chief-of-staff:** Your Master Orchestrator. Manages the **Maturity Roadmap** and delegates tasks.
-* **@cto:** Your Lead Architect. Focuses on security-first infrastructure, technical debt, and privacy.
-* **@cfo:** Your Financial Strategist. Focuses on unit economics, zero-burn infrastructure, and pricing.
-* **@legal:** Your General Counsel. Focuses on liability, entity formation (LLC vs. C-Corp), and compliance.
-* **@cmo:** Your Chief Marketing Officer. Focuses on positioning, messaging, and getting the first paying customers.
+Unlike generic chatbots, **auto-c-suite** uses a role-based, multi-agent architecture with a **talent pool** model — not every executive is hired for every company. The Founding Interview recommends a starting board based on your business type and stage. As you grow, you add executives with `/hire @[agent]`.
+
+**Master Orchestrator:**
+* **@chief-of-staff:** Manages the Maturity Roadmap, runs the Founding Interview, and delegates to the active board.
+
+**Talent Pool** (hire the ones that fit your stage and business type):
+| Agent | Role | Default for |
+|-------|------|-------------|
+| `@cfo` | Financial Strategist — unit economics, burn rate, pricing | All companies |
+| `@legal` | General Counsel — entity formation, contracts, compliance | All companies |
+| `@cmo` | Chief Marketing Officer — positioning, messaging, first customers | All companies |
+| `@cto` | Lead Architect — infrastructure, technical debt, security | Tech product companies |
+| `@coo` | Chief Operating Officer — delivery, process, hiring, scaling | Service businesses; any company at Stage 2+ |
+| `@cro` | Chief Revenue Officer — pipeline, deals, closing, revenue metrics | B2B companies at Stage 2+ |
 
 Both **Claude Code** and **Gemini CLI** are supported — use whichever fits your workflow.
 
 ### The "Memory" Protocol
 Each agent maintains its own persistent memory log and **reads all other agents' logs** before advising. The CTO knows what the CFO approved. The Legal agent flags when the CMO's marketing claims create regulatory exposure. They don't just answer questions in isolation — they build a **shared Corporate Ledger** that gets smarter with every session.
+
+---
+
+## 🆚 Why Not Just Use ChatGPT?
+
+Fair question. In a single short session, the difference can feel subtle. But the architecture is where the real advantages live:
+
+### 1. Memory that compounds across sessions
+With a generic chatbot, every session starts from zero — you re-explain your company, re-establish context, re-surface prior decisions. Here, every agent reads a persistent `COMPANY_CONTEXT.md` and its own memory log before responding. A legal concern flagged in session one is already known by the CFO in session three. **The system gets smarter with every conversation.**
+
+### 2. Role-constrained tension as useful signal
+A single chatbot tries to be "balanced." A CFO agent whose mandate is to minimize burn *will push back* on the CTO's infrastructure choice — because that's its job. A Legal agent *will flag* when the CMO's marketing copy creates regulatory exposure. These aren't hedged opinions; they're role-based constraints producing the kind of productive friction you'd get in a real boardroom. The disagreements are information.
+
+### 3. Cross-functional accountability, automatically
+In a chatbot conversation, surfacing cross-functional context is your job. Here, it's built into the protocol: every agent reads every other agent's memory before advising. Legal already knows what the CMO proposed. The CFO already knows what the CTO approved. You don't have to carry that context yourself.
+
+### 4. The boardroom round
+One of the most powerful interactions is simply asking the board to go around the table:
+```
+Go around each board member and tell me your thoughts — where we are and what's important right now from your perspective.
+```
+Because each agent holds its own memory and role mandate, you get genuinely differentiated perspectives — not a single model wearing different hats, but role-constrained advisors drawing on separate institutional knowledge.
+
+### 5. A versioned, private strategic record
+`COMPANY_CONTEXT.md` is your company's persistent brain — updated after every meaningful session, gitignored by default, and never sent anywhere. It's the document every advisor has read before they open their mouth.
+
+---
+
 ## 🗺️ The Maturity Roadmap
 The framework guides you through the five stages of startup evolution:
 1. **Stage 0: Idea** – Problem/Solution fit and mission alignment.
@@ -31,7 +67,7 @@ The framework guides you through the five stages of startup evolution:
 ## 🛠️ Planned Enhancements
 We are currently building toward the "Fully Operational" suite:
 * [ ] **Google Workspace MCP Integration:** Allowing agents to read/write emails, manage calendars, and draft documents in Google Drive.
-* [ ] **`/status` Command:** Automatically assess the current Maturity Stage and surface the next set of executive priorities.
+* [x] **`/status` Command:** Automatically assess the current Maturity Stage and surface the next set of executive priorities.
 * [ ] **Recursive Memory Compaction:** Automated "Weekly Board Reviews" that summarize long memory logs into high-density decision records to keep context windows lean.
 * [ ] **Multi-Persona Profiles:** Pre-configured context for different industries (e.g., SaaS, Personal Chef, Professional Services).
 ## ⚡ Quick Start
@@ -40,7 +76,7 @@ Works with **Claude Code** (`claude`) or **Gemini CLI** (`gemini`) — your choi
 
 **1. Clone and set up:**
 ```bash
-git clone https://github.com/your-username/auto-c-suite.git
+git clone https://github.com/peterthelander/auto-c-suite.git
 cd auto-c-suite
 ./setup.sh
 ```
@@ -58,7 +94,7 @@ The Chief of Staff will walk you through a structured interview to populate your
 
 ### 💬 Example Conversations
 
-**Call the full board on a strategic question:**
+**Call specific board members on a strategic question:**
 ```
 @cto @cfo What are the biggest risks to my current prototype, and what should I fix first?
 ```
