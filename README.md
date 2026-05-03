@@ -34,7 +34,6 @@ We are currently building toward the "Fully Operational" suite:
 * [ ] **`/status` Command:** Automatically assess the current Maturity Stage and surface the next set of executive priorities.
 * [ ] **Recursive Memory Compaction:** Automated "Weekly Board Reviews" that summarize long memory logs into high-density decision records to keep context windows lean.
 * [ ] **Multi-Persona Profiles:** Pre-configured context for different industries (e.g., SaaS, Personal Chef, Professional Services).
-* [ ] **Gemini CLI Parity:** Full `/interview` script and `@cmo` agent for the Gemini CLI path.
 ## ⚡ Quick Start
 
 1. **Clone the repo:**
@@ -76,4 +75,7 @@ gemini "Strategic Review: @cto @cfo, what are the biggest risks to my current pr
 Your business data belongs to you. **auto-c-suite** is designed with a "Zero-Footprint" local-first architecture. Your `COMPANY_CONTEXT.md` and all agent memory files (`.claude/memory/`, `.gemini/memory/`) are gitignored by default — your private strategic decisions never leave your machine.
 
 
-*Created by Peter Alan Thelander, 2026.*
+## 📄 License
+This project is licensed under the **GNU General Public License v3.0**. See [LICENSE](LICENSE) for details.
+
+*Created by Peter Thelander, 2026.*
