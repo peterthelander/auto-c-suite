@@ -1,10 +1,21 @@
 #!/bin/bash
 
-# Ensure memory directory exists
-mkdir -p .gemini/memory/
+# --- Claude Code Setup ---
+echo "Setting up Claude Code agent memory..."
+mkdir -p .claude/memory/
+touch .claude/memory/cto_logs.md
+touch .claude/memory/cfo_ledger.md
+touch .claude/memory/legal_briefs.md
+echo "Claude Code setup complete."
 
-# Initialize empty log files if they don't exist
+# --- Gemini CLI Setup ---
+echo "Setting up Gemini CLI agent memory..."
+mkdir -p .gemini/memory/
 touch .gemini/memory/cto_logs.md
 touch .gemini/memory/cfo_ledger.md
+echo "Gemini CLI setup complete."
 
-gemini \"I am ready for the /interview to populate COMPANY_CONTEXT.md\" --approval-mode auto_edit
+echo ""
+echo "Setup complete! To begin your Founding Interview:"
+echo ""
+echo "  Claude Code:  claude 'I am ready for the /interview'"

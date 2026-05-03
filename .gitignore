@@ -1,5 +1,6 @@
 COMPANY_CONTEXT.md
 .gemini/memory/*.md
+.claude/memory/*.md
 .env
 node_modules/
 dist/

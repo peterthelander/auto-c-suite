@@ -10,6 +10,8 @@ Unlike generic chatbots, **auto-c-suite** uses a role-based, multi-agent archite
 * **@cto:** Your Lead Architect. Focuses on security-first infrastructure, technical debt, and privacy.
 * **@cfo:** Your Financial Strategist. Focuses on unit economics, zero-burn infrastructure, and pricing.
 * **@legal:** Your General Counsel. Focuses on liability, entity formation (LLC vs. C-Corp), and compliance.
+
+Both **Claude Code** and **Gemini CLI** are supported — use whichever fits your workflow.
 ### The "Memory" Protocol
 Each agent maintains its own persistent memory in .gemini/memory/. They don't just answer questions; they build a **Corporate Ledger** of every decision made, ensuring that your company has a "long-term brain" as it grows.
 ## 🗺️ The Maturity Roadmap
@@ -26,17 +28,41 @@ We are currently building toward the "Fully Operational" suite:
 * [ ] **Recursive Memory Compaction:** Automated "Weekly Board Reviews" that summarize long chat logs into high-density decision records to keep context windows lean.
 * [ ] **Multi-Persona Profiles:** Pre-configured context for different industries (e.g., SaaS, Personal Chef, Professional Services).
 ## ⚡ Quick Start
-1. **Clone the repo:** git clone https://github.com/your-username/auto-c-suite.git
-2. **Run Setup:** ./setup.sh
-3. **The Founding Interview:** ```bash
+
+1. **Clone the repo:**
+```bash
+git clone https://github.com/your-username/auto-c-suite.git
+cd auto-c-suite
+```
+
+2. **Run Setup:**
+```bash
+./setup.sh
+```
+
+3. **The Founding Interview:**
+
+**Claude Code:**
+```bash
+claude
+# Then type: I am ready for the /interview
+```
+
+**Gemini CLI:**
+```bash
 gemini "I am ready for the /interview to populate COMPANY_CONTEXT.md"
 ```
 
-```
 4. **The First Board Meeting:**
+
+**Claude Code:**
+```
+Strategic Review: @cto @cfo, what are the biggest risks to my current prototype?
+```
+
+**Gemini CLI:**
 ```bash
 gemini "Strategic Review: @cto @cfo, what are the biggest risks to my current prototype?"
-
 ```
 ## 🛡️ Sovereign Data Policy
 Your business data belongs to you. **auto-c-suite** is designed with a "Zero-Footprint" local-first architecture. Your COMPANY_CONTEXT.md and .gemini/memory/ files are ignored by Git by default, ensuring your private strategic decisions never leave your machine.
