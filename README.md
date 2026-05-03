@@ -36,40 +36,56 @@ We are currently building toward the "Fully Operational" suite:
 * [ ] **Multi-Persona Profiles:** Pre-configured context for different industries (e.g., SaaS, Personal Chef, Professional Services).
 ## ⚡ Quick Start
 
-1. **Clone the repo:**
+Works with **Claude Code** (`claude`) or **Gemini CLI** (`gemini`) — your choice. Once you're in the session, the conversation is the same either way.
+
+**1. Clone and set up:**
 ```bash
 git clone https://github.com/your-username/auto-c-suite.git
 cd auto-c-suite
-```
-
-2. **Run Setup:**
-```bash
 ./setup.sh
 ```
 
-3. **The Founding Interview:**
-
-**Claude Code:**
+**2. Start your CLI and run the Founding Interview:**
 ```bash
-claude
-# Then type: I am ready for the /interview
+claude   # or: gemini
+```
+```
+/interview
+```
+The Chief of Staff will walk you through a structured interview to populate your `COMPANY_CONTEXT.md` — your company's permanent strategic record. Every agent reads this file before every response.
+
+---
+
+### 💬 Example Conversations
+
+**Call the full board on a strategic question:**
+```
+@cto @cfo What are the biggest risks to my current prototype, and what should I fix first?
 ```
 
-**Gemini CLI:**
-```bash
-gemini "I am ready for the /interview to populate COMPANY_CONTEXT.md"
+**Get a technical architecture review:**
+```
+@cto I'm deciding between Supabase and a self-hosted Postgres on Fly.io. What do you recommend given our stage?
 ```
 
-4. **The First Board Meeting:**
-
-**Claude Code:**
+**Run a financial gut-check:**
 ```
-Strategic Review: @cto @cfo, what are the biggest risks to my current prototype?
+@cfo I'm thinking of charging $29/month. Does that make sense given my target customer and burn rate?
 ```
 
-**Gemini CLI:**
-```bash
-gemini "Strategic Review: @cto @cfo, what are the biggest risks to my current prototype?"
+**Get legal clarity before you ship:**
+```
+@legal I'm about to launch a waitlist and collect emails. What do I need in place before I go live?
+```
+
+**Work out your go-to-market:**
+```
+@cmo I have a working product but zero users. Where should I focus first to get my first 10 paying customers?
+```
+
+**Run a cross-functional review:**
+```
+Strategic review: @cto @cfo @cmo @legal — I'm ready to move from prototype to public launch. What does each of you need to see before we go?
 ```
 ## 🛡️ Sovereign Data Policy
 Your business data belongs to you. **auto-c-suite** is designed with a "Zero-Footprint" local-first architecture. Your `COMPANY_CONTEXT.md` and all agent memory files (`.claude/memory/`, `.gemini/memory/`) are gitignored by default — your private strategic decisions never leave your machine.
