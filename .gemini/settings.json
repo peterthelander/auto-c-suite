@@ -9,7 +9,8 @@
       "mode": "write"
     },
     "shell": {
-      "mode": "ask"
+      "mode": "ask",
+      "allow": ["date", "cp"]
     }
   }
 }
