@@ -6,6 +6,7 @@ mkdir -p .claude/memory/
 touch .claude/memory/cto_logs.md
 touch .claude/memory/cfo_ledger.md
 touch .claude/memory/legal_briefs.md
+touch .claude/memory/cmo_briefs.md
 echo "Claude Code setup complete."
 
 # --- Gemini CLI Setup ---

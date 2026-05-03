@@ -2,18 +2,25 @@
 ### *The Sovereign "Company-in-a-Box" for the Solo Entrepreneur.*
 **auto-c-suite** is an open-source framework designed to bridge the "Seniority Gap" for solo founders. By orchestrating a specialized executive team of AI agents—Chief of Staff, CTO, CFO, General Counsel and others—this repository turns a local folder into a functioning corporate entity.
 ## 🚀 The Movement: Why This Matters
-The Class of 2026 is entering the toughest job market in nearly 40 years. Entry-level "learning" roles are vanishing as AI automates junior tasks. But while AI can write code, it cannot yet **govern a company.**
-The mission of **auto-c-suite** is to provide the "Symmetry of Automation." If AI automates the work, we can use AI to automate the **mentorship.** This repo is for the developer, the chef, the consultant, and the creative who has a prototype but lacks the "Senior Room" of advisors to turn that prototype into a sustainable, legal, and profitable business.
+The Class of 2026 is entering the toughest job market in nearly 40 years. As AI automates entry-level work, more new graduates are skipping the traditional career ladder entirely — and going straight to building something of their own.
+
+That's not a bad outcome. But it creates a new problem: the traditional path through junior and mid-level roles wasn't just about income. It was where you absorbed institutional knowledge — how to price a service, how to structure a legal entity, how to manage burn rate, how to position a product. The "Senior Room" of advisors you'd eventually earn access to.
+
+Without that experience, a solo founder with a great idea and a working prototype can still stall — not because the idea is bad, but because they've never had to think about liability, or unit economics, or what "go-to-market" actually means in practice.
+
+**auto-c-suite** is built to bridge that gap. It gives the developer, the chef, the consultant, and the creative a full executive team — CTO, CFO, General Counsel, CMO — that brings that accumulated institutional knowledge to bear on their specific situation. You don't need to spend years climbing a corporate ladder to get access to senior-level strategic thinking. That's what this is for.
 ## 🧠 How It Works: Multi-Agent Orchestration
 Unlike generic chatbots, **auto-c-suite** uses a role-based, multi-agent architecture:
 * **@chief-of-staff:** Your Master Orchestrator. Manages the **Maturity Roadmap** and delegates tasks.
 * **@cto:** Your Lead Architect. Focuses on security-first infrastructure, technical debt, and privacy.
 * **@cfo:** Your Financial Strategist. Focuses on unit economics, zero-burn infrastructure, and pricing.
 * **@legal:** Your General Counsel. Focuses on liability, entity formation (LLC vs. C-Corp), and compliance.
+* **@cmo:** Your Chief Marketing Officer. Focuses on positioning, messaging, and getting the first paying customers.
 
 Both **Claude Code** and **Gemini CLI** are supported — use whichever fits your workflow.
+
 ### The "Memory" Protocol
-Each agent maintains its own persistent memory in .gemini/memory/. They don't just answer questions; they build a **Corporate Ledger** of every decision made, ensuring that your company has a "long-term brain" as it grows.
+Each agent maintains its own persistent memory log and **reads all other agents' logs** before advising. The CTO knows what the CFO approved. The Legal agent flags when the CMO's marketing claims create regulatory exposure. They don't just answer questions in isolation — they build a **shared Corporate Ledger** that gets smarter with every session.
 ## 🗺️ The Maturity Roadmap
 The framework guides you through the five stages of startup evolution:
 1. **Stage 0: Idea** – Problem/Solution fit and mission alignment.
@@ -24,9 +31,10 @@ The framework guides you through the five stages of startup evolution:
 ## 🛠️ Planned Enhancements
 We are currently building toward the "Fully Operational" suite:
 * [ ] **Google Workspace MCP Integration:** Allowing agents to read/write emails, manage calendars, and draft documents in Google Drive.
-* [ ] **Maturity State Engine:** A /status command to automatically assess where the project is and "unlock" the next set of executive tasks.
-* [ ] **Recursive Memory Compaction:** Automated "Weekly Board Reviews" that summarize long chat logs into high-density decision records to keep context windows lean.
+* [ ] **`/status` Command:** Automatically assess the current Maturity Stage and surface the next set of executive priorities.
+* [ ] **Recursive Memory Compaction:** Automated "Weekly Board Reviews" that summarize long memory logs into high-density decision records to keep context windows lean.
 * [ ] **Multi-Persona Profiles:** Pre-configured context for different industries (e.g., SaaS, Personal Chef, Professional Services).
+* [ ] **Gemini CLI Parity:** Full `/interview` script and `@cmo` agent for the Gemini CLI path.
 ## ⚡ Quick Start
 
 1. **Clone the repo:**
@@ -65,7 +73,7 @@ Strategic Review: @cto @cfo, what are the biggest risks to my current prototype?
 gemini "Strategic Review: @cto @cfo, what are the biggest risks to my current prototype?"
 ```
 ## 🛡️ Sovereign Data Policy
-Your business data belongs to you. **auto-c-suite** is designed with a "Zero-Footprint" local-first architecture. Your COMPANY_CONTEXT.md and .gemini/memory/ files are ignored by Git by default, ensuring your private strategic decisions never leave your machine.
+Your business data belongs to you. **auto-c-suite** is designed with a "Zero-Footprint" local-first architecture. Your `COMPANY_CONTEXT.md` and all agent memory files (`.claude/memory/`, `.gemini/memory/`) are gitignored by default — your private strategic decisions never leave your machine.
 
 
 *Created by Peter Alan Thelander, 2026.*
