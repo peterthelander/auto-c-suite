@@ -28,7 +28,13 @@ Unlike generic chatbots, **auto-c-suite** uses a role-based, multi-agent archite
 Both **Claude Code** and **Gemini CLI** are supported — use whichever fits your workflow.
 
 ### The "Memory" Protocol
-Each agent maintains its own persistent memory log and **reads all other agents' logs** before advising. The CTO knows what the CFO approved. The Legal agent flags when the CMO's marketing claims create regulatory exposure. They don't just answer questions in isolation — they build a **shared Corporate Ledger** that gets smarter with every session.
+The framework uses a three-tier memory model designed to keep context lean and agent identities distinct:
+
+- **Agent-owned logs** — each executive maintains their own private memory (e.g. `cto_logs.md`, `cfo_ledger.md`). Only that agent reads its own log in full.
+- **Shared corporate decisions log** — cross-functional decisions are distilled by the Chief of Staff into a concise `corporate_decisions.md` that every agent reads. The CTO knows the CFO approved a budget cap. Legal knows the CMO is running a campaign that needs a compliance check. This is the "memo from the board meeting" — curated signal, not raw reasoning dumps.
+- **Company context** — `COMPANY_CONTEXT.md` is read by everyone, every session.
+
+This keeps individual agents lean (they don't load four full logs for every query), preserves each agent's distinct "self," and routes cross-functional accountability through the Chief of Staff — the right hub for that coordination.
 
 ---
 
@@ -43,7 +49,7 @@ With a generic chatbot, every session starts from zero — you re-explain your c
 A single chatbot tries to be "balanced." A CFO agent whose mandate is to minimize burn *will push back* on the CTO's infrastructure choice — because that's its job. A Legal agent *will flag* when the CMO's marketing copy creates regulatory exposure. These aren't hedged opinions; they're role-based constraints producing the kind of productive friction you'd get in a real boardroom. The disagreements are information.
 
 ### 3. Cross-functional accountability, automatically
-In a chatbot conversation, surfacing cross-functional context is your job. Here, it's built into the protocol: every agent reads every other agent's memory before advising. Legal already knows what the CMO proposed. The CFO already knows what the CTO approved. You don't have to carry that context yourself.
+In a chatbot conversation, surfacing cross-functional context is your job. Here, it's built into the protocol: the Chief of Staff distills cross-functional decisions into a shared corporate log that every agent reads before advising. Legal already knows the CMO proposed a new channel that needs a compliance check. The CFO already knows the CTO's infrastructure choice was approved at a given budget. You don't have to carry that context yourself — and agents don't waste context loading four full memory dumps for every domain question.
 
 ### 4. The boardroom round
 One of the most powerful interactions is simply asking the board to go around the table:

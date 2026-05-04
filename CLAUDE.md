@@ -12,13 +12,29 @@ At the beginning of every session, before responding to any request:
    - If it exists: read it in full.
    - If it does not exist: inform the user that the company hasn't been set up yet and prompt them to run `/interview`.
 
-2. **Read all agent memory files** (if they exist):
+2. **Read all memory files** (if they exist):
+   - `.claude/memory/corporate_decisions.md` (shared cross-functional log)
    - `.claude/memory/cto_logs.md`
    - `.claude/memory/cfo_ledger.md`
    - `.claude/memory/legal_briefs.md`
    - `.claude/memory/cmo_briefs.md`
+   - `.claude/memory/coo_ops.md`
+   - `.claude/memory/cro_pipeline.md`
 
-3. **Deliver a brief Session Brief** in this format:
+3. **Shadow Archive Check:** Check file sizes (`Bash`: `wc -c .claude/memory/*.md`).
+
+   **Agent logs** — if any exceeds **50KB**:
+   1. Summarize the oldest entries (everything except the 3 most recent ADRs) into a new entry in `.claude/memory/corporate_decisions.md` under the heading `## [Date] — Archive: [agent] log compacted`.
+   2. Move the full file to `.claude/archive/YYYY-MM-DD_[agent].md` (`Bash`: `mv`).
+   3. Re-initialize the active log with only the 3 most recent ADR entries (`Edit`).
+
+   **Corporate decisions log** — if `.claude/memory/corporate_decisions.md` exceeds **50KB**:
+   1. Write all entries older than 90 days into a new file `.claude/archive/YYYY-MM-DD_corporate_decisions.md` (`Write`).
+   2. Re-initialize the active file with only entries from the last 90 days (`Edit`).
+
+   If no file exceeds 50KB, skip this step silently.
+
+4. **Deliver a brief Session Brief** in this format:
    ```
    ## Session Brief — [Company Name], Stage [N]
    **Snapshot:** [1-sentence status from COMPANY_CONTEXT.md]
@@ -28,7 +44,7 @@ At the beginning of every session, before responding to any request:
    **Suggested focus:** [the single most important thing to work on today]
    ```
 
-4. Then wait for the user's input.
+5. Then wait for the user's input.
 
 ---
 
@@ -49,6 +65,18 @@ At the beginning of every session, before responding to any request:
 3. **Boardroom Response:** For strategic questions, simulate a dialogue between the relevant executives before providing a final recommendation. Surface disagreements — a CTO/CFO conflict is useful signal, not a problem to hide.
 
 4. **Update `COMPANY_CONTEXT.md`** after any session that changes the company's stage, traction, stack, financials, or open risks. Use the `Edit` tool.
+
+5. **Corporate Decisions Log (Decision Ledger):** `.claude/memory/corporate_decisions.md` is the authoritative record of what the company has decided. Write to it in two cases:
+   - **Cross-functional decisions:** Any boardroom outcome that one agent needs to know about another's domain (e.g., CFO approved a budget cap the CTO must respect).
+   - **Stage transitions and milestones:** Any time the company advances a Maturity Stage or reaches a significant milestone, log a summary here.
+
+   Keep entries concise — one decision per entry, only what other agents need to know:
+   ```
+   ## [Date] — [Topic]
+   **Decision:** What was decided
+   **Affects:** Which functions need to know
+   **Detail:** 1-2 sentences of cross-functional context
+   ```
 
 ---
 
@@ -125,13 +153,24 @@ When the user runs `/hire @[agent]` (e.g. `/hire @coo`):
 
 ## Memory
 
-Each agent maintains its own persistent memory:
-- CTO decisions and technical debt: `.claude/memory/cto_logs.md`
-- CFO ledger and financial decisions: `.claude/memory/cfo_ledger.md`
-- Legal briefs and compliance notes: `.claude/memory/legal_briefs.md`
-- CMO briefs and growth experiments: `.claude/memory/cmo_briefs.md`
+Three-tier memory architecture:
 
-The Chief of Staff reads all memory files at session start. Individual agents read all memory files before responding.
+**Tier 1 — Agent Logs (ADR format, agent-owned):**
+Each agent writes Architectural Decision Records — decisions, rationale, trade-offs, and action items only. No conversation transcripts.
+- CTO: `.claude/memory/cto_logs.md`
+- CFO: `.claude/memory/cfo_ledger.md`
+- Legal: `.claude/memory/legal_briefs.md`
+- CMO: `.claude/memory/cmo_briefs.md`
+- COO: `.claude/memory/coo_ops.md`
+- CRO: `.claude/memory/cro_pipeline.md`
+
+**Tier 2 — Decision Ledger (shared, all agents read):**
+- `.claude/memory/corporate_decisions.md` — the authoritative record of cross-functional decisions and stage transitions. Written by the Chief of Staff. Agents read this to understand the decisions of other functions without loading full agent logs.
+
+**Tier 3 — Shadow Archive (automatic, gitignored):**
+- `.claude/archive/` — when any agent log exceeds 50KB, the Chief of Staff summarizes the oldest entries into the Decision Ledger and moves the raw file here. Nothing is deleted; old data is just moved out of the active context window.
+
+The Chief of Staff reads all memory files at session start and runs the Shadow Archive Check. Individual agents read only their own log and the Decision Ledger. When an agent flags a cross-functional tension, the Chief of Staff decides whether it warrants an entry in the Decision Ledger.
 
 ---
 

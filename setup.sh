@@ -1,74 +1,70 @@
 #!/bin/bash
 
+# Helper: write a file only if it does not already exist
+init_file() {
+  local path="$1"
+  local content="$2"
+  if [ -f "$path" ]; then
+    echo "  [skip] $path already exists"
+  else
+    echo "$content" > "$path"
+    echo "  [init] $path"
+  fi
+}
+
 # --- Claude Code Setup ---
 echo "Setting up Claude Code agent memory..."
 mkdir -p .claude/memory/
+mkdir -p .claude/archive/
 
-cat > .claude/memory/cto_logs.md << 'EOF'
-# CTO Log
-*(No entries yet.)*
-EOF
+init_file ".claude/memory/corporate_decisions.md" "# Corporate Decisions Log
+*(No entries yet.)*"
 
-cat > .claude/memory/cfo_ledger.md << 'EOF'
-# CFO Ledger
-*(No entries yet.)*
-EOF
+init_file ".claude/memory/cto_logs.md" "# CTO Log
+*(No entries yet.)*"
 
-cat > .claude/memory/legal_briefs.md << 'EOF'
-# Legal Briefs
-*(No entries yet.)*
-EOF
+init_file ".claude/memory/cfo_ledger.md" "# CFO Ledger
+*(No entries yet.)*"
 
-cat > .claude/memory/cmo_briefs.md << 'EOF'
-# CMO Briefs
-*(No entries yet.)*
-EOF
+init_file ".claude/memory/legal_briefs.md" "# Legal Briefs
+*(No entries yet.)*"
 
-cat > .claude/memory/coo_ops.md << 'EOF'
-# COO Ops Log
-*(No entries yet.)*
-EOF
+init_file ".claude/memory/cmo_briefs.md" "# CMO Briefs
+*(No entries yet.)*"
 
-cat > .claude/memory/cro_pipeline.md << 'EOF'
-# CRO Pipeline Log
-*(No entries yet.)*
-EOF
+init_file ".claude/memory/coo_ops.md" "# COO Ops Log
+*(No entries yet.)*"
+
+init_file ".claude/memory/cro_pipeline.md" "# CRO Pipeline Log
+*(No entries yet.)*"
 
 echo "Claude Code setup complete."
 
 # --- Gemini CLI Setup ---
 echo "Setting up Gemini CLI agent memory..."
 mkdir -p .gemini/memory/
+mkdir -p .gemini/archive/
 
-cat > .gemini/memory/cto_logs.md << 'EOF'
-# CTO Log
-*(No entries yet.)*
-EOF
+init_file ".gemini/memory/corporate_decisions.md" "# Corporate Decisions Log
+*(No entries yet.)*"
 
-cat > .gemini/memory/cfo_ledger.md << 'EOF'
-# CFO Ledger
-*(No entries yet.)*
-EOF
+init_file ".gemini/memory/cto_logs.md" "# CTO Log
+*(No entries yet.)*"
 
-cat > .gemini/memory/legal_briefs.md << 'EOF'
-# Legal Briefs
-*(No entries yet.)*
-EOF
+init_file ".gemini/memory/cfo_ledger.md" "# CFO Ledger
+*(No entries yet.)*"
 
-cat > .gemini/memory/cmo_briefs.md << 'EOF'
-# CMO Briefs
-*(No entries yet.)*
-EOF
+init_file ".gemini/memory/legal_briefs.md" "# Legal Briefs
+*(No entries yet.)*"
 
-cat > .gemini/memory/coo_ops.md << 'EOF'
-# COO Ops Log
-*(No entries yet.)*
-EOF
+init_file ".gemini/memory/cmo_briefs.md" "# CMO Briefs
+*(No entries yet.)*"
 
-cat > .gemini/memory/cro_pipeline.md << 'EOF'
-# CRO Pipeline Log
-*(No entries yet.)*
-EOF
+init_file ".gemini/memory/coo_ops.md" "# COO Ops Log
+*(No entries yet.)*"
+
+init_file ".gemini/memory/cro_pipeline.md" "# CRO Pipeline Log
+*(No entries yet.)*"
 
 echo "Gemini CLI setup complete."
 

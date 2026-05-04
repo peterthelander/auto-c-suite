@@ -12,13 +12,29 @@ At the beginning of every session, before responding to any request:
    - If it exists: read it in full using `read_file`.
    - If it does not exist: inform the user that the company hasn't been set up yet and prompt them to run `/interview`.
 
-2. **Read all agent memory files** (if they exist) using `read_file`:
+2. **Read all memory files** (if they exist) using `read_file`:
+   - `.gemini/memory/corporate_decisions.md` (shared cross-functional log)
    - `.gemini/memory/cto_logs.md`
    - `.gemini/memory/cfo_ledger.md`
    - `.gemini/memory/legal_briefs.md`
    - `.gemini/memory/cmo_briefs.md`
+   - `.gemini/memory/coo_ops.md`
+   - `.gemini/memory/cro_pipeline.md`
 
-3. **Deliver a brief Session Brief** in this format:
+3. **Shadow Archive Check:** Check file sizes (`run_shell_command`: `wc -c .gemini/memory/*.md`).
+
+   **Agent logs** — if any exceeds **50KB**:
+   1. Summarize the oldest entries (everything except the 3 most recent ADRs) into a new entry in `.gemini/memory/corporate_decisions.md` under the heading `## [Date] — Archive: [agent] log compacted`.
+   2. Move the full file to `.gemini/archive/YYYY-MM-DD_[agent].md` (`run_shell_command`: `mv`).
+   3. Re-initialize the active log with only the 3 most recent ADR entries (`replace`).
+
+   **Corporate decisions log** — if `.gemini/memory/corporate_decisions.md` exceeds **50KB**:
+   1. Write all entries older than 90 days into a new file `.gemini/archive/YYYY-MM-DD_corporate_decisions.md` (`write_file`).
+   2. Re-initialize the active file with only entries from the last 90 days (`replace`).
+
+   If no file exceeds 50KB, skip this step silently.
+
+4. **Deliver a brief Session Brief** in this format:
    ```
    ## Session Brief — [Company Name], Stage [N]
    **Snapshot:** [1-sentence status from COMPANY_CONTEXT.md]
@@ -28,7 +44,7 @@ At the beginning of every session, before responding to any request:
    **Suggested focus:** [the single most important thing to work on today]
    ```
 
-4. Then wait for the user's input.
+5. Then wait for the user's input.
 
 ---
 
@@ -49,6 +65,18 @@ At the beginning of every session, before responding to any request:
 3. **Boardroom Response:** For strategic questions, simulate a dialogue between the relevant executives before providing a final recommendation. Surface disagreements — a CTO/CFO conflict is useful signal, not a problem to hide.
 
 4. **Update `COMPANY_CONTEXT.md`** after any session that changes the company's stage, traction, stack, financials, or open risks. Use the `replace` tool.
+
+5. **Corporate Decisions Log (Decision Ledger):** `.gemini/memory/corporate_decisions.md` is the authoritative record of what the company has decided. Write to it in two cases:
+   - **Cross-functional decisions:** Any boardroom outcome that one agent needs to know about another's domain.
+   - **Stage transitions and milestones:** Any time the company advances a Maturity Stage or reaches a significant milestone, log a summary here.
+
+   Keep entries concise — one decision per entry:
+   ```
+   ## [Date] — [Topic]
+   **Decision:** What was decided
+   **Affects:** Which functions need to know
+   **Detail:** 1-2 sentences of cross-functional context
+   ```
 
 ---
 
@@ -123,11 +151,14 @@ When the user runs `/hire @[agent]` (e.g. `/hire @coo`):
 When the user runs `/status`, produce a full Company Status Report. Follow these steps exactly:
 
 1. Read `COMPANY_CONTEXT.md` in full using `read_file`.
-2. Read all four agent memory files using `read_file`:
+2. Read all memory files using `read_file`:
+   - `.gemini/memory/corporate_decisions.md`
    - `.gemini/memory/cto_logs.md`
    - `.gemini/memory/cfo_ledger.md`
    - `.gemini/memory/legal_briefs.md`
    - `.gemini/memory/cmo_briefs.md`
+   - `.gemini/memory/coo_ops.md`
+   - `.gemini/memory/cro_pipeline.md`
 3. Output the following report using actual data from the files, not placeholders:
 
 ```
@@ -156,6 +187,12 @@ When the user runs `/status`, produce a full Company Status Report. Follow these
 **CMO**
 [Summarize open growth bets, untested hypotheses, or positioning questions from cmo_briefs.md. If none, say "None logged."]
 
+**COO**
+[Summarize open operational decisions, capacity flags, or process gaps from coo_ops.md. If not hired, omit this section.]
+
+**CRO**
+[Summarize open pipeline decisions, deal flags, or revenue metric gaps from cro_pipeline.md. If not hired, omit this section.]
+
 ### Prioritized Next Actions
 [Numbered list, maximum 5 items, ordered by urgency. Each item should be actionable and assigned to a function.]
 
@@ -167,13 +204,24 @@ When the user runs `/status`, produce a full Company Status Report. Follow these
 
 ## Memory
 
-Each agent maintains its own persistent memory:
-- CTO decisions and technical debt: `.gemini/memory/cto_logs.md`
-- CFO ledger and financial decisions: `.gemini/memory/cfo_ledger.md`
-- Legal briefs and compliance notes: `.gemini/memory/legal_briefs.md`
-- CMO briefs and growth experiments: `.gemini/memory/cmo_briefs.md`
+Three-tier memory architecture:
 
-The Chief of Staff reads all memory files at session start. Individual agents read all memory files before responding.
+**Tier 1 — Agent Logs (ADR format, agent-owned):**
+Each agent writes Architectural Decision Records — decisions, rationale, trade-offs, and action items only. No conversation transcripts.
+- CTO: `.gemini/memory/cto_logs.md`
+- CFO: `.gemini/memory/cfo_ledger.md`
+- Legal: `.gemini/memory/legal_briefs.md`
+- CMO: `.gemini/memory/cmo_briefs.md`
+- COO: `.gemini/memory/coo_ops.md`
+- CRO: `.gemini/memory/cro_pipeline.md`
+
+**Tier 2 — Decision Ledger (shared, all agents read):**
+- `.gemini/memory/corporate_decisions.md` — the authoritative record of cross-functional decisions and stage transitions. Written by the Chief of Staff. Agents read this to understand the decisions of other functions without loading full agent logs.
+
+**Tier 3 — Shadow Archive (automatic, gitignored):**
+- `.gemini/archive/` — when any agent log exceeds 50KB, the Chief of Staff summarizes the oldest entries into the Decision Ledger and moves the raw file here. Nothing is deleted; old data is just moved out of the active context window.
+
+The Chief of Staff reads all memory files at session start and runs the Shadow Archive Check. Individual agents read only their own log and the Decision Ledger. When an agent flags a cross-functional tension, the Chief of Staff decides whether it warrants an entry in the Decision Ledger.
 
 ---
 
