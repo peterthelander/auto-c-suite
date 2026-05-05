@@ -21,18 +21,19 @@ At the beginning of every session, before responding to any request:
    - `.claude/memory/coo_ops.md`
    - `.claude/memory/cro_pipeline.md`
 
-3. **Shadow Archive Check:** Check file sizes (`Bash`: `wc -c .claude/memory/*.md`).
+3. **Shadow Archive Check:** Run `Bash`: `./compact.sh` to check memory file sizes.
 
-   **Agent logs** — if any exceeds **50KB**:
-   1. Summarize the oldest entries (everything except the 3 most recent ADRs) into a new entry in `.claude/memory/corporate_decisions.md` under the heading `## [Date] — Archive: [agent] log compacted`.
-   2. Move the full file to `.claude/archive/YYYY-MM-DD_[agent].md` (`Bash`: `mv`).
-   3. Re-initialize the active log with only the 3 most recent ADR entries (`Edit`).
+   **Agent logs** — for each file flagged `NEEDS COMPACTION`, in this exact order:
+   1. **Archive first** — `Bash`: `./compact.sh --archive <file>`. This safely copies the file to `.claude/archive/` with a date prefix before anything is modified. Note the printed path.
+   2. **Extract the tail** — `Bash`: `./compact.sh --tail <file> 3`. This prints the last 3 ADR sections. Hold this output — it becomes the new file body.
+   3. **Summarize** — Write a new entry to `.claude/memory/corporate_decisions.md` under `## [Date] — Archive: [agent] log compacted`, summarizing all entries *not* in the tail output.
+   4. **Re-initialize** — Using `Edit`, rewrite the active log: preserve the file's preamble (everything before the first `## ` entry), then append the 3-section tail from step 2.
 
-   **Corporate decisions log** — if `.claude/memory/corporate_decisions.md` exceeds **50KB**:
-   1. Write all entries older than 90 days into a new file `.claude/archive/YYYY-MM-DD_corporate_decisions.md` (`Write`).
-   2. Re-initialize the active file with only entries from the last 90 days (`Edit`).
+   **Corporate decisions log** — if `.claude/memory/corporate_decisions.md` is flagged:
+   1. **Archive first** — `Bash`: `./compact.sh --archive .claude/memory/corporate_decisions.md`.
+   2. **Re-initialize** — Using `Edit`, rewrite the file with only entries from the last 90 days, preserving the preamble.
 
-   If no file exceeds 50KB, skip this step silently.
+   If `./compact.sh` reports all files OK, skip this step silently.
 
 4. **Deliver a brief Session Brief** in this format:
    ```
