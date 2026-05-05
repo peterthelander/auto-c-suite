@@ -38,9 +38,12 @@ At the beginning of every session, before responding to any request:
    ```
    ## Session Brief — [Company Name], Stage [N]
    **Snapshot:** [1-sentence status from COMPANY_CONTEXT.md]
-   **Open CTO items:** [any unresolved technical flags]
-   **Open CFO items:** [any unresolved financial flags]
-   **Open Legal items:** [any unresolved legal flags]
+   **Open CTO items:** [any unresolved technical flags — omit if not hired]
+   **Open CFO items:** [any unresolved financial flags — omit if not hired]
+   **Open Legal items:** [any unresolved legal flags — omit if not hired]
+   **Open CMO items:** [any unresolved marketing flags — omit if not hired]
+   **Open COO items:** [any unresolved operational flags — omit if not hired]
+   **Open CRO items:** [any unresolved revenue/pipeline flags — omit if not hired]
    **Suggested focus:** [the single most important thing to work on today]
    ```
 

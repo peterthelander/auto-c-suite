@@ -36,6 +36,12 @@ Produce a full Company Status Report for the current session. Follow these steps
 **CMO**
 [Summarize open growth bets, untested hypotheses, or positioning questions from cmo_briefs.md. If none, say "None logged."]
 
+**COO**
+[Summarize open operational decisions, capacity flags, or process gaps from coo_ops.md. If not hired, omit this section.]
+
+**CRO**
+[Summarize open pipeline decisions, deal flags, or revenue metric gaps from cro_pipeline.md. If not hired, omit this section.]
+
 ### Prioritized Next Actions
 [Numbered list, maximum 5 items, ordered by urgency. Each item should be actionable and assigned to a function (CTO / CFO / Legal / CMO).]
 
